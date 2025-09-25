@@ -6,7 +6,7 @@ import {
   KanbanCards,
   KanbanCard,
 } from '@/components/ui/shadcn-io/kanban';
-import { Calendar, AlertCircle, Circle, ArrowUp } from 'lucide-react';
+import { Calendar, AlertCircle, Circle, ArrowUp, ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Helper function to get priority colors and icons
 const getPriorityConfig = (priority: 'low' | 'medium' | 'high') => {
@@ -59,91 +59,156 @@ interface KanbanItem {
 const initialData: KanbanItem[] = [
   {
     id: '1',
-    name: 'Research market trends',
+    name: 'Grow in numbers',
     column: 'backlog',
-    description: 'Analyze current market trends and competitor analysis',
+    description: 'Scale team size and expand our consulting capacity',
     priority: 'medium',
     assignee: {
-      name: 'Sarah Chen',
-      avatar: '👩‍💼',
-      initials: 'SC'
+      name: 'Niklas Andervang',
+      avatar: '👨‍',
+      initials: 'NA'
     },
-    tags: ['Research', 'Analysis'],
-    dueDate: '2025-09-30'
+    tags: ['Growth', 'Strategy']
   },
   {
     id: '2',
-    name: 'Design landing page',
-    column: 'todo',
-    description: 'Create wireframes and mockups for the new landing page',
-    priority: 'high',
+    name: 'Connect & Network',
+    column: 'backlog',
+    description: 'Build strategic partnerships and expand professional network',
+    priority: 'low',
     assignee: {
-      name: 'Alex Rodriguez',
-      avatar: '👨‍🎨',
-      initials: 'AR'
+      name: 'John Doe',
+      avatar: '👨‍💼',
+      initials: 'JD'
     },
-    tags: ['Design', 'UI/UX'],
-    dueDate: '2025-09-28'
+    tags: ['Networking', 'Partnerships']
   },
   {
     id: '3',
-    name: 'Implement authentication',
-    column: 'in-progress',
-    description: 'Set up user login and registration functionality',
+    name: 'Acquire senior talents',
+    column: 'todo',
+    description: 'Recruit senior full-stack developers, tech leads, and architects',
     priority: 'high',
     assignee: {
-      name: 'Marcus Johnson',
-      avatar: '👨‍💻',
-      initials: 'MJ'
+      name: 'Niklas Andervang',
+      avatar: '👨‍',
+      initials: 'NA'
     },
-    tags: ['Backend', 'Security']
+    tags: ['Recruitment', 'Leadership'],
+    dueDate: '2025-10-15'
   },
   {
     id: '4',
-    name: 'Setup database schema',
-    column: 'done',
-    description: 'Define and implement the database structure',
+    name: 'Website case studies',
+    column: 'todo',
+    description: 'Improve website with detailed case studies and client success stories',
     priority: 'medium',
     assignee: {
-      name: 'Emily Park',
-      avatar: '👩‍💻',
-      initials: 'EP'
+      name: 'John Doe',
+      avatar: '👨‍💼',
+      initials: 'JD'
     },
-    tags: ['Database', 'Backend']
+    tags: ['Content', 'Marketing'],
+    dueDate: '2025-11-01'
   },
   {
     id: '5',
-    name: 'Write API documentation',
+    name: 'Blog & Mini-Podcasts',
     column: 'todo',
-    description: 'Document all API endpoints and their usage',
+    description: 'Launch blog and mini-podcast features to share insights and expertise',
     priority: 'low',
     assignee: {
-      name: 'David Kim',
-      avatar: '👨‍📚',
-      initials: 'DK'
+      name: 'Niklas Andervang',
+      avatar: '👨',
+      initials: 'NA'
     },
-    tags: ['Documentation', 'API']
+    tags: ['Content', 'Branding']
   },
   {
     id: '6',
-    name: 'User testing feedback',
-    column: 'backlog',
-    description: 'Collect and analyze user feedback from beta testing',
+    name: 'AI Agent Framework',
+    column: 'in-progress',
+    description: 'Developing AI agent framework for enterprise client implementation',
+    priority: 'high',
+    assignee: {
+      name: 'Niklas Andervang',
+      avatar: '👨',
+      initials: 'NA'
+    },
+    tags: ['AI', 'Development']
+  },
+  {
+    id: '7',
+    name: 'Post & Telestyrelsen Collab',
+    column: 'in-progress',
+    description: 'Continuing digitalization partnership with Post and Telestyrelsen for Digitaldag.se',
+    priority: 'high',
+    assignee: {
+      name: 'John Doe',
+      avatar: '👨‍💼',
+      initials: 'JD'
+    },
+    tags: ['Government', 'Digitalization']
+  },
+  {
+    id: '8',
+    name: 'Accessibility Consulting',
+    column: 'in-progress',
+    description: 'Regular accessibility specialist services for various partner organizations',
     priority: 'medium',
     assignee: {
-      name: 'Lisa Wong',
-      avatar: '👩‍🔬',
-      initials: 'LW'
+      name: 'Niklas Andervang',
+      avatar: '👨‍💻',
+      initials: 'NA'
     },
-    tags: ['Testing', 'UX Research'],
-    dueDate: '2025-10-05'
+    tags: ['Accessibility', 'Consulting']
   },
+  {
+    id: '9',
+    name: 'Website v0.01',
+    column: 'done',
+    description: 'Completed initial website launch with core features and functionality',
+    priority: 'high',
+    assignee: {
+      name: 'Niklas Andervang',
+      avatar: '👨‍',
+      initials: 'NA'
+    },
+    tags: ['Web Dev', 'Launch']
+  },
+  {
+    id: '10',
+    name: 'IAAP Accessibility Certification',
+    column: 'done',
+    description: 'Successfully obtained IAAP professional accessibility certification',
+    priority: 'medium',
+    assignee: {
+      name: 'Niklas Andervang',
+      avatar: '👨‍💻',
+      initials: 'NA'
+    },
+    tags: ['Certification', 'Accessibility']
+  },
+  {
+    id: '11',
+    name: 'Service Network Established',
+    column: 'done',
+    description: 'Built professional network and established service partnerships',
+    priority: 'medium',
+    assignee: {
+      name: 'John Doe',
+      avatar: '👨‍💼',
+      initials: 'JD'
+    },
+    tags: ['Network', 'Services']
+  }
 ];
 
 const KanbanSection = () => {
   const [data, setData] = useState(initialData);
   const [isReverting, setIsReverting] = useState(false);
   const [boardKey, setBoardKey] = useState(0);
+  const [activeTabIndex, setActiveTabIndex] = useState(2); // Default to "In Progress"
   const revertTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Create a deep copy of the original data to ensure it doesn't get mutated
@@ -181,21 +246,66 @@ const KanbanSection = () => {
   }, []);
 
   return (
-    <section className="py-20 px-4">
+    <section className="py-20 px-4 bg-white dark:bg-kanban-board">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-foreground mb-4 font-mono tracking-tight">
-            PROJECT_MANAGEMENT_BOARD
+            COMPANY_MANAGEMENT_BOARD
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-mono">
-            {'>'} Track projects and tasks with interactive kanban interface
+            {'>'} Real-time snapshot of our company's active initiatives
           </p>
           <p className="text-sm text-muted-foreground mt-2 font-mono">
-            // Drag and drop cards between columns to update status
+            // Just a fun way of showing a glimpse of what's "cooking".
           </p>
         </div>
 
-        <div className="h-96 w-full">
+        {/* Mobile Tab Navigation */}
+        <div className="md:hidden mb-6">
+          <div className="flex border-b border-border">
+            {initialColumns.map((column, index) => (
+              <button
+                key={column.id}
+                onClick={() => setActiveTabIndex(index)}
+                className={`flex-1 py-2 px-2 text-xs font-medium transition-colors ${
+                  activeTabIndex === index
+                    ? 'text-primary border-b-2 border-primary bg-secondary/50'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <div className="flex items-center justify-center">
+                  <span>{column.name}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+          
+          {/* Navigation arrows for mobile */}
+          <div className="flex justify-between items-center mt-4 px-4">
+            <button
+              onClick={() => setActiveTabIndex(Math.max(0, activeTabIndex - 1))}
+              disabled={activeTabIndex === 0}
+              className="flex items-center gap-2 text-sm text-muted-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Previous
+            </button>
+            <span className="text-xs text-muted-foreground font-mono">
+              {activeTabIndex + 1} of {initialColumns.length}
+            </span>
+            <button
+              onClick={() => setActiveTabIndex(Math.min(initialColumns.length - 1, activeTabIndex + 1))}
+              disabled={activeTabIndex === initialColumns.length - 1}
+              className="flex items-center gap-2 text-sm text-muted-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Desktop: Full Kanban Board */}
+        <div className="hidden md:block h-[550px] w-full">
           <KanbanProvider
             key={boardKey}
             columns={initialColumns}
@@ -205,7 +315,7 @@ const KanbanSection = () => {
           >
             {(column) => (
               <KanbanBoard key={column.id} id={column.id}>
-                <KanbanHeader className="bg-secondary border-b p-3">
+                <KanbanHeader className="bg-secondary dark:bg-kanban-column border-b p-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <h3 className="font-semibold text-foreground">
@@ -294,6 +404,119 @@ const KanbanSection = () => {
               </KanbanBoard>
             )}
           </KanbanProvider>
+        </div>
+
+        {/* Mobile: Single Column View with Tabs */}
+        <div className="md:hidden">
+          {initialColumns.map((column, index) => (
+            <div
+              key={column.id}
+              className={`${activeTabIndex === index ? 'block' : 'hidden'}`}
+            >
+              <div className="border border-border bg-card dark:bg-kanban-column overflow-hidden">
+                <div className="bg-secondary dark:bg-kanban-column border-b p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">
+                        {column.id === 'backlog' && '📋'}
+                        {column.id === 'todo' && '📝'}
+                        {column.id === 'in-progress' && '⚡'}
+                        {column.id === 'done' && '✅'}
+                      </span>
+                      <div>
+                        <h3 className="font-semibold text-foreground text-lg">
+                          {column.name}
+                        </h3>
+                        <span className="text-sm text-muted-foreground">
+                          {data.filter((item) => item.column === column.id).length} tasks
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="p-4 space-y-4 max-h-[550px] overflow-y-auto">
+                  {data
+                    .filter((item) => item.column === column.id)
+                    .map((item) => {
+                      const kanbanItem = item as KanbanItem;
+                      return (
+                        <div
+                          key={item.id}
+                          className="bg-background border border-border p-4 transition-all duration-200 hover:shadow-md"
+                        >
+                          <div className="space-y-3">
+                            {/* Header with title and priority */}
+                            <div className="flex items-start justify-between">
+                              <h4 className="font-medium text-card-foreground leading-tight flex-1 pr-2">
+                                {item.name}
+                              </h4>
+                              {(() => {
+                                const priorityConfig = getPriorityConfig(kanbanItem.priority);
+                                const PriorityIcon = priorityConfig.icon;
+                                return (
+                                  <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${priorityConfig.color}`}>
+                                    <PriorityIcon className="w-3 h-3" />
+                                    <span>{priorityConfig.label}</span>
+                                  </div>
+                                );
+                              })()}
+                            </div>
+
+                            {/* Description */}
+                            <p className="text-sm text-muted-foreground">
+                              {kanbanItem.description}
+                            </p>
+
+                            {/* Tags */}
+                            <div className="flex flex-wrap gap-2">
+                              {kanbanItem.tags.map((tag, tagIndex) => (
+                                <span
+                                  key={tagIndex}
+                                  className="px-2 py-1 text-xs bg-secondary text-secondary-foreground border border-border"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+
+                            {/* Footer with assignee and due date */}
+                            <div className="flex items-center justify-between pt-3 border-t border-border">
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 bg-secondary border border-border flex items-center justify-center">
+                                  {kanbanItem.assignee.avatar}
+                                </div>
+                                <span className="text-sm text-muted-foreground font-mono">
+                                  {kanbanItem.assignee.name}
+                                </span>
+                              </div>
+                              {kanbanItem.dueDate && (
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                  <Calendar className="w-4 h-4" />
+                                  <span className="font-mono">
+                                    {new Date(kanbanItem.dueDate).toLocaleDateString('en-US', { 
+                                      month: 'short', 
+                                      day: 'numeric' 
+                                    })}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  
+                  {data.filter((item) => item.column === column.id).length === 0 && (
+                    <div className="text-center py-12 text-muted-foreground">
+                      <span className="text-2xl mb-2 block">📝</span>
+                      <p className="text-sm">No tasks in this column</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

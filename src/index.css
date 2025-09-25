@@ -1,6 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100;200;300;400;500;600;700;800;900&family=Geist+Mono:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  /* Custom scrollbar styles */
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .scrollbar-thumb-gray-400::-webkit-scrollbar-thumb {
+    background-color: rgb(156, 163, 175);
+    border-radius: 4px;
+  }
+  
+  .scrollbar-track-gray-200::-webkit-scrollbar-track {
+    background-color: rgb(229, 231, 235);
+    border-radius: 4px;
+  }
+  
+  .hover\:scrollbar-thumb-gray-500:hover::-webkit-scrollbar-thumb {
+    background-color: rgb(107, 114, 128);
+  }
+  
+  /* Firefox scrollbar */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(156, 163, 175) rgb(229, 231, 235);
+  }
+
+  /* Footer background effects */
+  .footer-grid-pattern {
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  .animate-pulse-delay-1 {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation-delay: 1s;
+  }
+
+  .animate-pulse-delay-2 {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation-delay: 2s;
+  }
+
+  .animate-pulse-delay-half {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation-delay: 0.5s;
+  }
+
+  .animate-pulse-delay-1-half {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation-delay: 1.5s;
+  }
+
+  /* Custom dark background */
+  .bg-custom-dark {
+    background-color: rgb(21 22 24);
+  }
+
+  .bg-custom-dark-lighter {
+    background-color: rgb(31 32 34);
+  }
+
+  .bg-custom-dark-lightest {
+    background-color: rgb(41 42 44);
+  }
+
+  .border-custom-dark {
+    border-color: rgb(41 42 44);
+  }
+
+  .bg-code-block {
+    background-color: rgb(16 22 33);
+  }
+
+  .bg-kanban-board {
+    background-color: rgb(16 22 33);
+  }
+
+  .bg-kanban-column {
+    background-color: rgb(21 22 24);
+  }
+
+  .bg-footer-dark {
+    background: linear-gradient(135deg, rgb(16 22 33) 0%, rgb(21 22 24) 50%, rgb(13 18 27) 100%);
+  }
+
+  /* Expertise title animations */
+  .animate-brace-blink {
+    animation: braceBlink 2.5s ease-in-out forwards;
+  }
+
+  @keyframes braceBlink {
+    0% { opacity: 0; transform: scale(0.8); }
+    15% { opacity: 1; transform: scale(1.1); }
+    25% { opacity: 0; transform: scale(0.9); }
+    40% { opacity: 1; transform: scale(1.05); }
+    50% { opacity: 0; transform: scale(0.95); }
+    65% { opacity: 1; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+}
 
 @layer base {
   body {

@@ -25,10 +25,13 @@ This landing page serves three primary purposes:
 This project follows **Specification-Driven Development** using GitHub Spec-Kit:
 
 ### Current Components
+
 - **HeroGeometric**: Animated landing section with geometric shapes
 - **KanbanSection**: Interactive task board with auto-revert functionality
+- **ClientShowcase**: Horizontal scrolling marquee displaying partner/client logos
+- **EnhancedFooter**: Comprehensive footer with contact information and social links
 - **ThemeToggle**: Dark/light mode switching with mono theme
-- **Layout Components**: Header, Footer, About, Contact, Expertise sections
+- **Layout Components**: Clean layout wrapper for consistent page structure
 
 ### Design System
 - **Theme**: shadCN mono theme with monospace fonts and zero border radius

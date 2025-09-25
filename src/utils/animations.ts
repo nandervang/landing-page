@@ -1,6 +1,18 @@
+// Helper function to check motion preferences
+const prefersReducedMotion = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+};
+
 // Helper functions for animations
 export const fadeIn = (element: HTMLElement, delay: number = 0, duration: number = 400): void => {
   if (!element) return;
+  
+  if (prefersReducedMotion()) {
+    // Skip animation for users who prefer reduced motion
+    element.style.opacity = '1';
+    return;
+  }
   
   element.style.opacity = '0';
   element.style.transition = `opacity ${duration}ms ease-in-out ${delay}ms`;
@@ -17,6 +29,13 @@ export const slideIn = (
   duration: number = 400
 ): void => {
   if (!element) return;
+  
+  if (prefersReducedMotion()) {
+    // Skip animation for users who prefer reduced motion
+    element.style.opacity = '1';
+    element.style.transform = 'translate(0, 0)';
+    return;
+  }
   
   const translateValues = {
     left: 'translateX(-30px)',
@@ -35,8 +54,8 @@ export const slideIn = (
   }, 10);
 };
 
-export const setupScrollAnimations = (): void => {
-  if (typeof window === 'undefined') return;
+export const setupScrollAnimations = (): (() => void) => {
+  if (typeof window === 'undefined') return () => {};
   
   const animateOnScroll = () => {
     const elements = document.querySelectorAll('[data-animate]');
