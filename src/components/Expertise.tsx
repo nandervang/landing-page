@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   Code, Database, Layout, Settings, Terminal, 
-  Globe, Figma, Smartphone 
+  Globe, Figma, Smartphone, FileText
 } from 'lucide-react';
 
 interface ExpertiseCardProps {
@@ -53,6 +53,11 @@ const Expertise: React.FC = () => {
       icon: <Settings size={24} />,
       title: 'Technical Consulting',
       description: 'Providing strategic guidance on technology decisions, architecture, and implementation.'
+    },
+    {
+      icon: <FileText size={24} />,
+      title: 'CMS & Content Strategy',
+      description: 'Building content management systems and developing strategies for scalable, maintainable content workflows.'
     }
   ];
 

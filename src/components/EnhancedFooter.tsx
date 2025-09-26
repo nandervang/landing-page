@@ -7,8 +7,9 @@ const services = [
   "Full-Stack Development", 
   "Accessibility Specialists",
   "Performance & Optimization",
-  "Audit, Analytics, and SEO",
-  "Team Training & Mentoring"
+  "Audits, Analytics, and SEO",
+  "Team Training & Mentoring",
+  "CMS & Content Strategy"
 ];
 
 const EnhancedFooter = () => {

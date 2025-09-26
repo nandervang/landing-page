@@ -90,9 +90,9 @@ const initialData: KanbanItem[] = [
     description: 'Recruit senior full-stack developers, tech leads, and architects',
     priority: 'high',
     assignee: {
-      name: 'Niklas Andervang',
-      avatar: '👨‍',
-      initials: 'NA'
+      name: 'Sandra Andervang',
+      avatar: '👩',
+      initials: 'SA'
     },
     tags: ['Recruitment', 'Leadership'],
     dueDate: '2025-10-15'
@@ -104,9 +104,9 @@ const initialData: KanbanItem[] = [
     description: 'Improve website with detailed case studies and client success stories',
     priority: 'medium',
     assignee: {
-      name: 'John Doe',
-      avatar: '👨‍💼',
-      initials: 'JD'
+      name: 'Sandra Andervang',
+      avatar: '👩',
+      initials: 'SA'
     },
     tags: ['Content', 'Marketing'],
     dueDate: '2025-11-01'
@@ -118,9 +118,9 @@ const initialData: KanbanItem[] = [
     description: 'Launch blog and mini-podcast features to share insights and expertise',
     priority: 'low',
     assignee: {
-      name: 'Niklas Andervang',
-      avatar: '👨',
-      initials: 'NA'
+      name: 'Sandra Andervang',
+      avatar: '👩',
+      initials: 'SA'
     },
     tags: ['Content', 'Branding']
   },
@@ -250,7 +250,7 @@ const KanbanSection = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-foreground mb-4 font-mono tracking-tight">
-            COMPANY_MANAGEMENT_BOARD
+            COMPANY _MANAGEMENT_BOARD
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-mono">
             {'>'} Real-time snapshot of our company's active initiatives
@@ -386,7 +386,7 @@ const KanbanSection = () => {
                                 {kanbanItem.assignee.avatar}
                               </div>
                               <span className="text-xs text-muted-foreground font-mono">
-                                {kanbanItem.assignee.name}
+                                {kanbanItem.assignee.initials}
                               </span>
                             </div>
                             {kanbanItem.dueDate && (
