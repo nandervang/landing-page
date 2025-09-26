@@ -210,9 +210,71 @@ const KanbanSection = () => {
   const [boardKey, setBoardKey] = useState(0);
   const [activeTabIndex, setActiveTabIndex] = useState(2); // Default to "In Progress"
   const revertTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [revertingItems, setRevertingItems] = useState<Set<string>>(new Set());
   
   // Create a deep copy of the original data to ensure it doesn't get mutated
   const originalDataRef = useRef(JSON.parse(JSON.stringify(initialData)));
+
+  // Animated revert function that moves items one by one
+  const animatedRevert = useCallback((currentData: KanbanItem[]) => {
+    const originalData = originalDataRef.current;
+    const changedItems = currentData.filter((item, index) => {
+      const originalItem = originalData[index];
+      return !originalItem || item.column !== originalItem.column || item.id !== originalItem.id;
+    });
+
+    if (changedItems.length === 0) return;
+
+    setIsReverting(true);
+    setRevertingItems(new Set(changedItems.map(item => item.id)));
+
+    // Move items back one by one with staggered timing
+    changedItems.forEach((item, index) => {
+      setTimeout(() => {
+        // First, highlight the item that's about to be moved
+        setRevertingItems(prev => new Set([...prev, item.id]));
+        
+        // Then after a brief "grab" delay, actually move it
+        setTimeout(() => {
+          setData(prevData => {
+            const newData = [...prevData];
+            const itemIndex = newData.findIndex(dataItem => dataItem.id === item.id);
+            const originalItem = originalData.find((origItem: KanbanItem) => origItem.id === item.id);
+            
+            if (itemIndex !== -1 && originalItem) {
+              // Move the item back to its original column and position
+              newData[itemIndex] = { ...originalItem };
+              
+              // Sort the array to match original order
+              newData.sort((a, b) => {
+                const aIndex = originalData.findIndex((orig: KanbanItem) => orig.id === a.id);
+                const bIndex = originalData.findIndex((orig: KanbanItem) => orig.id === b.id);
+                return aIndex - bIndex;
+              });
+            }
+            
+            return newData;
+          });
+
+          // Remove from reverting items after animation completes
+          setTimeout(() => {
+            setRevertingItems(prev => {
+              const newSet = new Set(prev);
+              newSet.delete(item.id);
+              return newSet;
+            });
+          }, 700); // Match CSS transition duration
+        }, 200); // Brief "grab" delay before moving
+      }, index * 400); // Stagger animations by 400ms for more realistic timing
+    });
+
+    // Clean up after all animations complete
+    setTimeout(() => {
+      setIsReverting(false);
+      setRevertingItems(new Set());
+      setBoardKey(prev => prev + 1); // Force re-render for clean state
+    }, changedItems.length * 400 + 1200); // Account for new stagger timing and grab delays
+  }, []);
 
   const handleDataChange = useCallback((newData: KanbanItem[]) => {
     // Clear any existing timeout
@@ -225,16 +287,9 @@ const KanbanSection = () => {
 
     // Set a timeout to revert the data after 3 seconds
     revertTimeoutRef.current = setTimeout(() => {
-      setIsReverting(true);
-      
-      // Smooth transition back to original state
-      setTimeout(() => {
-        setData([...originalDataRef.current]);
-        setBoardKey(prev => prev + 1); // Force re-render for clean state
-        setIsReverting(false);
-      }, 200); // Brief delay for smooth animation
+      animatedRevert(newData);
     }, 3000);
-  }, []);
+  }, [animatedRevert]);
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -258,6 +313,15 @@ const KanbanSection = () => {
           <p className="text-sm text-muted-foreground mt-2 font-mono">
             // Just a fun way of showing a glimpse of what's "cooking".
           </p>
+          
+          {/* Status Indicator */}
+          {isReverting && revertingItems.size > 0 && (
+            <div className="mt-4 p-3 bg-primary/10 border border-primary/20 rounded-lg">
+              <p className="text-sm text-primary font-mono animate-pulse">
+                🤖 Auto-reverting {revertingItems.size} item{revertingItems.size !== 1 ? 's' : ''} back to original position...
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Mobile Tab Navigation */}
@@ -340,10 +404,20 @@ const KanbanSection = () => {
                         id={item.id}
                         name={item.name}
                         column={item.column}
-                        className={`bg-card hover:shadow-lg border border-border transition-all duration-500 ${
-                          isReverting ? 'opacity-70 scale-95' : 'opacity-100 scale-100'
+                        className={`bg-card hover:shadow-lg border border-border transition-all duration-700 ease-in-out relative ${
+                          revertingItems.has(item.id) 
+                            ? 'opacity-95 scale-105 shadow-xl ring-2 ring-primary/40 animate-gentle-bounce z-10' 
+                            : isReverting 
+                              ? 'opacity-90 scale-[0.98]' 
+                              : 'opacity-100 scale-100'
                         }`}
                       >
+                        {/* Sparkle effect for reverting items */}
+                        {revertingItems.has(item.id) && (
+                          <div className="absolute -top-1 -right-1 text-xs animate-ping">
+                            ✨
+                          </div>
+                        )}
                         <div className="space-y-3">
                           {/* Header with title and priority */}
                           <div className="flex items-start justify-between">

@@ -108,11 +108,15 @@ export const KanbanCard = <T extends KanbanItemProps = KanbanItemProps>({
     isDragging,
   } = useSortable({
     id,
+    transition: {
+      duration: 700, // Longer, smoother transition duration
+      easing: 'cubic-bezier(0.25, 0.8, 0.25, 1)', // Smooth ease-in-out
+    },
   });
   const { activeCardId } = useContext(KanbanContext) as KanbanContextProps;
 
   const style = {
-    transition,
+    transition: transition || 'transform 700ms cubic-bezier(0.25, 0.8, 0.25, 1)',
     transform: CSS.Transform.toString(transform),
   };
 
@@ -121,7 +125,7 @@ export const KanbanCard = <T extends KanbanItemProps = KanbanItemProps>({
       <div style={style} {...listeners} {...attributes} ref={setNodeRef}>
         <Card
           className={cn(
-            'cursor-grab gap-4 rounded-md p-3 shadow-sm',
+            'cursor-grab gap-4 rounded-md p-3 shadow-sm transition-all duration-700 ease-in-out',
             isDragging && 'pointer-events-none cursor-grabbing opacity-30',
             className
           )}
@@ -133,7 +137,7 @@ export const KanbanCard = <T extends KanbanItemProps = KanbanItemProps>({
         <t.In>
           <Card
             className={cn(
-              'cursor-grab gap-4 rounded-md p-3 shadow-sm ring-2 ring-primary',
+              'cursor-grab gap-4 rounded-md p-3 shadow-sm ring-2 ring-primary transition-all duration-700 ease-in-out',
               isDragging && 'cursor-grabbing',
               className
             )}
@@ -165,7 +169,7 @@ export const KanbanCards = <T extends KanbanItemProps = KanbanItemProps>({
     <ScrollArea className="overflow-hidden">
       <SortableContext items={items}>
         <div
-          className={cn('flex flex-grow flex-col gap-2 p-2', className)}
+          className={cn('flex flex-grow flex-col gap-2 p-2 transition-all duration-700 ease-in-out', className)}
           {...props}
         >
           {filteredData.map(children)}
@@ -219,10 +223,7 @@ export const KanbanProvider = <
   );
 
   const handleDragStart = (event: DragStartEvent) => {
-    const card = data.find((item) => item.id === event.active.id);
-    if (card) {
-      setActiveCardId(event.active.id as string);
-    }
+    setActiveCardId(event.active.id as string);
     onDragStart?.(event);
   };
 
@@ -263,11 +264,10 @@ export const KanbanProvider = <
   const handleDragEnd = (event: DragEndEvent) => {
     setActiveCardId(null);
 
-    onDragEnd?.(event);
-
     const { active, over } = event;
 
     if (!over || active.id === over.id) {
+      onDragEnd?.(event);
       return;
     }
 
@@ -279,6 +279,7 @@ export const KanbanProvider = <
     newData = arrayMove(newData, oldIndex, newIndex);
 
     onDataChange?.(newData);
+    onDragEnd?.(event);
   };
 
   const announcements: Announcements = {

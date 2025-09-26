@@ -80,6 +80,16 @@ export default {
   				'4': 'var(--chart-4)',
   				'5': 'var(--chart-5)'
   			}
+  		},
+  		animation: {
+  			'gentle-bounce': 'gentle-bounce 0.6s ease-in-out infinite',
+  		},
+  		keyframes: {
+  			'gentle-bounce': {
+  				'0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+  				'25%': { transform: 'translateY(-2px) rotate(0.5deg)' },
+  				'75%': { transform: 'translateY(-1px) rotate(-0.5deg)' }
+  			}
   		}
   	}
   },
