@@ -4,6 +4,22 @@ export default {
   darkMode: 'class',
   theme: {
   	extend: {
+  		container: {
+  			center: true,
+  			padding: '1rem',
+  			screens: {
+  				'sm': '768px',   // 640px * 1.2 = 768px
+  				'md': '1152px',  // 960px * 1.2 = 1152px  
+  				'lg': '1536px',  // 1280px * 1.2 = 1536px
+  				'xl': '1920px',  // 1600px * 1.2 = 1920px
+  				'2xl': '2304px', // 1920px * 1.2 = 2304px
+  			},
+  		},
+  		maxWidth: {
+  			'7xl': '96rem',    // Original 80rem * 1.2 = 96rem
+  			'8xl': '108rem',   // Original 90rem * 1.2 = 108rem
+  			'9xl': '120rem',   // Original 100rem * 1.2 = 120rem
+  		},
   		fontFamily: {
   			sans: [
   				'Geist',

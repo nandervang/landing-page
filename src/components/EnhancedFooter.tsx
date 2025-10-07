@@ -95,13 +95,13 @@ const EnhancedFooter = () => {
             </span>
             <span className="text-foreground"> Your Vision?</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Partner with Andervang Consulting to elevate your digital initiatives with our team of highly experienced specialists.
           </p>
         </div>
 
         {/* Services Stack - Centered */}
-        <div className="max-w-2xl mx-auto mb-16">
+        <div className="max-w-3xl mx-auto mb-16">
           <h3 className="text-3xl font-semibold text-foreground text-center mb-8 flex items-center justify-center gap-4">
             <span className={`text-4xl font-bold text-orange-400 transition-all duration-300 ${showBraces ? 'animate-brace-blink' : 'opacity-0'}`}>
               {'{'}

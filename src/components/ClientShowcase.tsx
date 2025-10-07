@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Marquee, MarqueeContent, MarqueeItem } from "@/components/ui/shadcn-io/marquee";
+import { Marquee, MarqueeContent, MarqueeItem, MarqueeLayer } from "@/components/ui/shadcn-io/marquee";
 import { Play, Pause } from "lucide-react";
 import { useMotionPreference } from "@/hooks/useMotionPreference";
+import CanvasBackground from "./CanvasBackground";
 
 interface Client {
   name: string;
@@ -116,11 +117,32 @@ const ClientShowcase = () => {
   }, [prefersReducedMotion]);
 
   return (
-    <section className="py-16 bg-gray-50 dark:bg-custom-dark transition-colors duration-300">
-      <div className="container mx-auto px-4">
+    <section className="relative py-16 bg-gray-50 dark:bg-custom-dark transition-colors duration-300 overflow-hidden">
+      {/* Section-contained Canvas Background - only in dark mode */}
+      <div className="hidden dark:block absolute inset-0 z-0">
+        <CanvasBackground />
+      </div>
+      
+      {/* Section-level overlays for content */}
+      <div className="absolute inset-0 z-10">
+        {/* Grid pattern overlay for tech aesthetic */}
+        <div className="absolute inset-0 opacity-10" 
+             style={{
+               backgroundImage: `
+                 linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+                 linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
+               `,
+               backgroundSize: '50px 50px'
+             }}>
+        </div>
+        {/* Subtle overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/10 dark:bg-black/20"></div>
+      </div>
+      
+      <div className="relative z-20 container mx-auto px-4">
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-4 mb-4">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white drop-shadow-lg">
               Trusted by Industry Leaders
             </h2>
             <button
@@ -144,7 +166,7 @@ const ClientShowcase = () => {
               )}
             </button>
           </div>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto drop-shadow-md">
             Leading the Way with Experience and Dedication That Earns Your Trust
           </p>
         </div>
@@ -164,7 +186,7 @@ const ClientShowcase = () => {
                     className="flex-shrink-0"
                   >
                     <div 
-                      className={`w-24 h-24 rounded-lg border-2 border-gray-200 dark:border-custom-dark bg-white dark:bg-custom-dark-lighter shadow-md flex items-center justify-center p-4 grayscale hover:grayscale-0 hover:border-emerald-300 dark:hover:border-emerald-500 ${
+                      className={`w-24 h-24 rounded-lg border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 backdrop-blur-sm shadow-md flex items-center justify-center p-4 grayscale hover:grayscale-0 hover:border-emerald-300 dark:hover:border-emerald-500 ${
                         prefersReducedMotion ? '' : 'transition-all duration-300'
                       }`}
                       role="img"
@@ -183,37 +205,107 @@ const ClientShowcase = () => {
               </div>
             </div>
           ) : (
-            // Animated marquee version
-            <Marquee className="relative overflow-hidden py-8">
-              <div className="absolute top-0 bottom-0 left-0 z-10 h-full w-24 bg-gradient-to-r from-white dark:from-[rgb(21,22,24)] to-transparent" />
-              <div className="absolute top-0 bottom-0 right-0 z-10 h-full w-24 bg-gradient-to-l from-white dark:from-[rgb(21,22,24)] to-transparent" />
-              <MarqueeContent 
-                pauseOnHover={!isPaused} 
-                autoFill 
-                play={!isPaused}
-                className="[--duration:45s]"
-              >
-                {clients.map((client, index) => (
-                  <MarqueeItem key={index} className="mx-6">
-                    <div 
-                      className={`w-24 h-24 rounded-lg border-2 border-gray-200 dark:border-custom-dark bg-white dark:bg-custom-dark-lighter shadow-md flex items-center justify-center p-4 grayscale hover:grayscale-0 hover:border-emerald-300 dark:hover:border-emerald-500 ${
-                        prefersReducedMotion ? '' : 'transition-all duration-300'
-                      }`}
-                      role="img"
-                      aria-label={`${client.name} logo`}
-                    >
-                      <img
-                        src={client.logo}
-                        alt=""
-                        aria-hidden="true"
-                        className="w-12 h-12 object-contain"
-                        loading="lazy"
-                      />
-                    </div>
-                  </MarqueeItem>
-                ))}
-              </MarqueeContent>
-            </Marquee>
+            // Layered marquee version with depth
+            <div className="relative overflow-hidden py-8">
+              {/* Background layer - slower, smaller, more transparent */}
+              <Marquee className="absolute inset-0 opacity-30 scale-90 transform translate-y-2">
+                <MarqueeContent 
+                  pauseOnHover={!isPaused} 
+                  autoFill 
+                  play={!isPaused}
+                  className="[--duration:80s]"
+                  direction="right"
+                >
+                  {clients.concat(clients).map((client, index) => (
+                    <MarqueeItem key={`bg-${index}`} className="mx-8">
+                      <div 
+                        className={`w-16 h-16 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/50 dark:bg-gray-800/30 backdrop-blur-sm shadow-sm flex items-center justify-center p-3 grayscale-[70%] ${
+                          prefersReducedMotion ? '' : 'transition-all duration-500'
+                        }`}
+                        role="img"
+                        aria-label={`${client.name} background logo`}
+                      >
+                        <img
+                          src={client.logo}
+                          alt=""
+                          aria-hidden="true"
+                          className="w-8 h-8 object-contain opacity-60"
+                          loading="lazy"
+                        />
+                      </div>
+                    </MarqueeItem>
+                  ))}
+                </MarqueeContent>
+              </Marquee>
+
+              {/* Middle layer - medium speed */}
+              <Marquee className="absolute inset-0 opacity-60 scale-95 transform translate-y-1">
+                <MarqueeContent 
+                  pauseOnHover={!isPaused} 
+                  autoFill 
+                  play={!isPaused}
+                  className="[--duration:60s]"
+                >
+                  {clients.map((client, index) => (
+                    <MarqueeItem key={`mid-${index}`} className="mx-7">
+                      <div 
+                        className={`w-20 h-20 rounded-lg border border-gray-250 dark:border-gray-650 bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm shadow-md flex items-center justify-center p-3 grayscale-[40%] hover:grayscale-0 hover:scale-105 ${
+                          prefersReducedMotion ? '' : 'transition-all duration-400'
+                        }`}
+                        role="img"
+                        aria-label={`${client.name} middle logo`}
+                      >
+                        <img
+                          src={client.logo}
+                          alt=""
+                          aria-hidden="true"
+                          className="w-10 h-10 object-contain opacity-80"
+                          loading="lazy"
+                        />
+                      </div>
+                    </MarqueeItem>
+                  ))}
+                </MarqueeContent>
+              </Marquee>
+
+              {/* Foreground layer - original speed, full opacity */}
+              <Marquee className="relative z-10">
+                <MarqueeContent 
+                  pauseOnHover={!isPaused} 
+                  autoFill 
+                  play={!isPaused}
+                  className="[--duration:45s]"
+                >
+                  {clients.map((client, index) => (
+                    <MarqueeItem key={`fg-${index}`} className="mx-6">
+                      <div 
+                        className={`w-24 h-24 rounded-lg border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 backdrop-blur-sm shadow-lg flex items-center justify-center p-4 grayscale hover:grayscale-0 hover:border-emerald-300 dark:hover:border-emerald-500 hover:shadow-xl hover:scale-110 ${
+                          prefersReducedMotion ? '' : 'transition-all duration-300 hover:z-20 relative'
+                        }`}
+                        role="img"
+                        aria-label={`${client.name} logo`}
+                      >
+                        <img
+                          src={client.logo}
+                          alt=""
+                          aria-hidden="true"
+                          className="w-12 h-12 object-contain"
+                          loading="lazy"
+                        />
+                      </div>
+                    </MarqueeItem>
+                  ))}
+                </MarqueeContent>
+              </Marquee>
+
+              {/* Enhanced gradient fades on top of all layers */}
+              <div className="absolute top-0 bottom-0 left-0 z-30 h-full w-32 bg-gradient-to-r from-gray-50 dark:from-custom-dark via-gray-50/60 dark:via-custom-dark/60 to-transparent pointer-events-none" />
+              <div className="absolute top-0 bottom-0 right-0 z-30 h-full w-32 bg-gradient-to-l from-gray-50 dark:from-custom-dark via-gray-50/60 dark:via-custom-dark/60 to-transparent pointer-events-none" />
+              
+              {/* Additional inner fade for better blend */}
+              <div className="absolute top-0 bottom-0 left-0 z-25 h-full w-16 bg-gradient-to-r from-gray-50 dark:from-custom-dark to-transparent opacity-80 pointer-events-none" />
+              <div className="absolute top-0 bottom-0 right-0 z-25 h-full w-16 bg-gradient-to-l from-gray-50 dark:from-custom-dark to-transparent opacity-80 pointer-events-none" />
+            </div>
           )}
         </div>
         
@@ -226,7 +318,7 @@ const ClientShowcase = () => {
           <div className="flex items-center justify-center gap-4">
             <div className="relative">
               {/* Animated code block */}
-              <div className="bg-gray-800 dark:bg-code-block rounded-lg p-4 font-mono text-sm border border-gray-300 dark:border-gray-600 shadow-lg max-w-md">
+              <div className="bg-gray-800 dark:bg-gray-900/95 backdrop-blur-sm rounded-lg p-4 font-mono text-sm border border-gray-300 dark:border-gray-600 shadow-lg max-w-md">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-3 h-3 rounded-full bg-red-400"></div>
                   <div className="w-3 h-3 rounded-full bg-yellow-400"></div>

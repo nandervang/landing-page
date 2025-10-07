@@ -131,34 +131,94 @@ export function HeroGeometric({
     }),
   };
 
+  const motionConfig = {
+    badge: {
+      initial: prefersReducedMotion ? {} : { opacity: 0, y: 20 },
+      animate: prefersReducedMotion ? {} : { opacity: 1, y: 0 },
+      transition: prefersReducedMotion ? { duration: 0 } : { duration: 0.6, delay: 0.2 }
+    },
+    titles: {
+      initial: prefersReducedMotion ? {} : { opacity: 0, y: 30 },
+      animate: prefersReducedMotion ? {} : { opacity: 1, y: 0 },
+      transition: prefersReducedMotion ? { duration: 0 } : { duration: 0.8, delay: 0.4 }
+    },
+    description: {
+      initial: prefersReducedMotion ? {} : { opacity: 0, y: 20 },
+      animate: prefersReducedMotion ? {} : { opacity: 1, y: 0 },
+      transition: prefersReducedMotion ? { duration: 0 } : { duration: 0.6, delay: 0.8 }
+    },
+    text: {
+      initial: prefersReducedMotion ? {} : { opacity: 0, y: 15 },
+      animate: prefersReducedMotion ? {} : { opacity: 1, y: 0 },
+      transition: prefersReducedMotion ? { duration: 0 } : { duration: 0.5, ease: [0.25, 0.4, 0.25, 1] as const }
+    }
+  };
+
   // Static content component for reduced motion
   const StaticContent = () => (
     <div className="relative z-10 container mx-auto px-4 md:px-6">
-      <div className="max-w-3xl mx-auto text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary border border-border mb-8 md:mb-12">
-          <Circle className="h-2 w-2 fill-green-500" />
-          <span className="text-sm text-muted-foreground tracking-wide uppercase">
-            {badge}
+            <div className="max-w-4xl mx-auto text-center">
+        <motion.div
+          className="mb-6 md:mb-8"
+          initial={motionConfig.badge.initial}
+          animate={motionConfig.badge.animate}
+          transition={motionConfig.badge.transition}
+        >
+          <span className="inline-flex items-center gap-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg border border-gray-200 dark:border-gray-700">
+            <Circle className="w-3 h-3 fill-emerald-400 text-emerald-400 animate-pulse" />
+            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wider">
+              {badge}
+            </span>
           </span>
+        </motion.div>
+        
+        <div className="space-y-4 mb-8">
+          <motion.div
+            initial={motionConfig.titles.initial}
+            animate={motionConfig.titles.animate}
+            transition={motionConfig.titles.transition}
+          >
+            <div className="overflow-hidden">
+              <motion.h1
+                initial={motionConfig.text.initial}
+                animate={motionConfig.text.animate}
+                transition={motionConfig.text.transition}
+                className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent leading-tight tracking-tight"
+              >
+                {title1}
+              </motion.h1>
+            </div>
+            
+            <div className="overflow-hidden">
+              <motion.h2
+                initial={motionConfig.text.initial}
+                animate={motionConfig.text.animate}
+                transition={{...motionConfig.text.transition, delay: 0.3}}
+                className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-600 bg-clip-text text-transparent leading-tight tracking-tight"
+              >
+                {title2}
+              </motion.h2>
+            </div>
+          </motion.div>
+          
+          <motion.div
+            initial={motionConfig.description.initial}
+            animate={motionConfig.description.animate}
+            transition={motionConfig.description.transition}
+          >
+            <div className="overflow-hidden">
+              <motion.div
+                initial={motionConfig.text.initial}
+                animate={motionConfig.text.animate}
+                transition={{...motionConfig.text.transition, delay: 0.6}}
+              >
+                <p className="text-xl sm:text-2xl md:text-[1.4rem] mb-8 leading-relaxed tracking-wide max-w-2xl mx-auto px-4 bg-gradient-to-r from-gray-600 via-gray-500 to-gray-700 bg-clip-text text-transparent">
+                  {description}
+                </p>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
-
-        <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold mb-6 md:mb-8 tracking-tight">
-          <span className="text-foreground">
-            {title1}
-          </span>
-          <br />
-          <span className="relative inline-block mx-4 text-6xl font-light bg-gradient-to-r from-emerald-700 via-green-600 to-emerald-800 bg-clip-text text-transparent transform rotate-12 animate-pulse">
-            &
-          </span>
-          <br />
-          <span className="bg-gradient-to-r from-gray-900 via-gray-700 to-gray-500 bg-clip-text text-transparent">
-            {title2}
-          </span>
-        </h1>
-
-                <p className="text-xl sm:text-2xl md:text-[1.4rem] mb-8 leading-relaxed tracking-wide max-w-xl mx-auto px-4 bg-gradient-to-r from-gray-600 via-gray-500 to-gray-700 bg-clip-text text-transparent">
-          {description}
-        </p>
       </div>
     </div>
   );
