@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Marquee, MarqueeContent, MarqueeItem } from "@/components/ui/shadcn-io/marquee";
-import { Play, Pause } from "lucide-react";
+import { Play, Pause, Minus, Plus, X } from "lucide-react";
 import { useMotionPreference } from "@/hooks/useMotionPreference";
 
 interface Client {
@@ -85,6 +85,18 @@ const clients: Client[] = [
     website: "https://valtech.com"
   },
   {
+    name: "Uppsala Universitet",
+    logo: "https://www.uu.se/images/18.17dda5f1791cdbd287d9b55/1622452923523/uu-logo-red.svg",
+    alt: "Uppsala Universitet",
+    website: "https://uu.se"
+  },
+  {
+    name: "Dorian Collective",
+    logo: "https://media.licdn.com/dms/image/v2/D4D0BAQHBosOYvu3f7A/company-logo_200_200/B4DZjhwCgOHsAM-/0/1756134123926?e=2147483647&v=beta&t=q1JW3oBKvmsqFf6iC21a5ruJUXKmvaNM_kn9okUng4Q",
+    alt: "Dorian Collective",
+    website: "https://doriancollective.com"
+  },
+  {
     name: "AstraZeneca",
     logo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjYwIiB2aWV3Qm94PSIwIDAgMjAwIDYwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMTAgMzBMMzAgMTBIMTBWMzBaIiBmaWxsPSIjMDA1N0EwIi8+CjxwYXRoIGQ9Ik0zMCAzMEw1MCA1MEgzMFYzMFoiIGZpbGw9IiMwMDU3QTAiLz4KPHA+YXRoIGQ9Ik01MCAzMEw3MCA1MEg1MFYzMFoiIGZpbGw9IiMwMDU3QTAiLz4KPHA+YXRoIGQ9Ik03MCAzMEw5MCA1MEg3MFYzMFoiIGZpbGw9IiMwMDU3QTAiLz4KPHA+YXRoIGQ9Ik05MCAzMEwxMTAgMTBIOTBWMzBaIiBmaWxsPSIjMDA1N0EwIi8+Cjx0ZXh0IHg9IjEyMCIgeT0iMzUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzAwNTdBMCI+QXN0cmFaZW5lY2E8L3RleHQ+Cjwvc3ZnPg==",
     alt: "AstraZeneca",
@@ -103,6 +115,370 @@ const clients: Client[] = [
     website: "https://securitas.com"
   }
 ];
+
+// Mac Window Component with Typing Animation
+const MacWindow = () => {
+  const [windowState, setWindowState] = useState<'minimized' | 'normal' | 'maximized'>('normal');
+  const [isVisible, setIsVisible] = useState(false);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const [typingComplete, setTypingComplete] = useState(false);
+  const [showConsoleOutput, setShowConsoleOutput] = useState(false);
+  const [currentLine, setCurrentLine] = useState(0);
+  const [currentChar, setCurrentChar] = useState(0);
+  const windowRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useMotionPreference();
+
+  // Code lines to type out
+  const codeLines = useMemo(() => [
+    "const fetchAvailableConsultants = async () => {",
+    "  const response = await fetch('/api/consultants', {",
+    "    method: 'GET',",
+    "    headers: { 'Content-Type': 'application/json' }",
+    "  });",
+    "",
+    "  if (!response.ok) {",
+    "    throw new Error('Failed to fetch consultants');",
+    "  }",
+    "",
+    "  return await response.json();",
+    "};",
+    "",
+    "// Let's see who's available for your project",
+    "const consultants = await fetchAvailableConsultants();",
+    "console.log(consultants);"
+  ], []);
+
+  // Mock JSON response to show after typing
+  const jsonResponse = {
+    success: true,
+    data: {
+      "niklas": "senior front-end developer and accessibility expert",
+      "robert": "full-stack developer and AI specialist/engineer", 
+      "andreas": "full-stack developer and accessibility certified professional",
+      "lucas": "DevOps engineer and AI specialist/cloud"
+    },
+    total: 5,
+    available: 4,
+    expertise: ["React", "TypeScript", "Node.js", "AI/ML", "Accessibility", "Cloud", "Mobile"],
+    responseTime: "147ms"
+  };
+
+  // Typing animation logic - simplified approach
+  const startTyping = useCallback(() => {
+    let currentLineIndex = 0;
+    let currentCharIndex = 0;
+    
+    const intervalId = setInterval(() => {
+      const currentLineText = codeLines[currentLineIndex] || '';
+      
+      if (currentCharIndex >= currentLineText.length) {
+        // Move to next line
+        currentLineIndex++;
+        currentCharIndex = 0;
+        
+        if (currentLineIndex >= codeLines.length) {
+          // All lines complete
+          clearInterval(intervalId);
+          setCurrentLine(currentLineIndex - 1);
+          setCurrentChar(codeLines[currentLineIndex - 1]?.length || 0);
+          
+          setTimeout(() => {
+            setTypingComplete(true);
+            setTimeout(() => {
+              setShowConsoleOutput(true);
+            }, 500);
+          }, 500);
+          return;
+        }
+        
+        setCurrentLine(currentLineIndex);
+        setCurrentChar(0);
+      } else {
+        // Type next character
+        currentCharIndex++;
+        setCurrentLine(currentLineIndex);
+        setCurrentChar(currentCharIndex);
+      }
+    }, 30);
+  }, [codeLines]);
+
+  // Intersection Observer for scroll-triggered animation
+  useEffect(() => {
+    const currentRef = windowRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          // Delay to create the "opening from dock" effect
+          setTimeout(() => {
+            setIsVisible(true);
+            setHasAnimated(true);
+            // Start typing after window animation completes
+            setTimeout(() => {
+              if (!prefersReducedMotion) {
+                startTyping();
+              } else {
+                // Show all content immediately if reduced motion
+                setCurrentLine(codeLines.length - 1);
+                setCurrentChar(codeLines[codeLines.length - 1].length);
+                setTypingComplete(true);
+                setShowConsoleOutput(true);
+              }
+            }, 700); // Wait for window animation to complete
+          }, 200);
+        }
+      },
+      {
+        threshold: 0.3,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    );
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [hasAnimated, prefersReducedMotion, startTyping, codeLines]);
+
+  const handleClose = () => {
+    setIsVisible(false);
+    setTimeout(() => {
+      setIsVisible(true);
+      setWindowState('normal');
+    }, 2000);
+  };
+
+  const handleMinimize = () => {
+    setWindowState('minimized');
+    setTimeout(() => {
+      setWindowState('normal');
+    }, 2000);
+  };
+
+  const handleMaximize = () => {
+    if (windowState === 'maximized') {
+      setWindowState('normal');
+    } else {
+      setWindowState('maximized');
+    }
+  };
+
+  // Render typed content
+  const renderTypedContent = () => {
+    return codeLines.map((line, lineIndex) => {
+      if (lineIndex < currentLine) {
+        // Fully typed lines
+        return (
+          <div key={lineIndex} className="text-gray-300">
+            {renderSyntaxHighlighting(line)}
+          </div>
+        );
+      } else if (lineIndex === currentLine) {
+        // Currently typing line
+        const visibleText = line.substring(0, currentChar);
+        return (
+          <div key={lineIndex} className="text-gray-300">
+            {renderSyntaxHighlighting(visibleText)}
+            <span className="animate-pulse bg-emerald-400 w-2 h-4 inline-block ml-0.5"></span>
+          </div>
+        );
+      }
+      return null;
+    });
+  };
+
+  // Simple syntax highlighting with proper JSX elements
+  const renderSyntaxHighlighting = (text: string) => {
+    // Handle empty lines
+    if (!text.trim()) {
+      return <span>&nbsp;</span>;
+    }
+
+    // Split text into tokens and apply highlighting
+    let key = 0;
+
+    // Process the text character by character to maintain proper highlighting
+    const processText = (str: string): JSX.Element[] => {
+      const result: JSX.Element[] = [];
+      let i = 0;
+      
+      while (i < str.length) {
+        // Check for keywords
+        if (/\b(const|await|async|return|if|throw|new)\b/.test(str.slice(i))) {
+          const match = str.slice(i).match(/\b(const|await|async|return|if|throw|new)\b/);
+          if (match && match.index === 0) {
+            result.push(<span key={key++} className="text-blue-300">{match[0]}</span>);
+            i += match[0].length;
+            continue;
+          }
+        }
+        
+        // Check for built-in functions
+        if (/\b(fetch|Error|response|json|console|log)\b/.test(str.slice(i))) {
+          const match = str.slice(i).match(/\b(fetch|Error|response|json|console|log)\b/);
+          if (match && match.index === 0) {
+            result.push(<span key={key++} className="text-yellow-300">{match[0]}</span>);
+            i += match[0].length;
+            continue;
+          }
+        }
+        
+        // Check for strings
+        if (str[i] === "'" || str[i] === '"') {
+          const quote = str[i];
+          let j = i + 1;
+          while (j < str.length && str[j] !== quote) {
+            j++;
+          }
+          if (j < str.length) {
+            j++; // Include closing quote
+            result.push(<span key={key++} className="text-green-400">{str.slice(i, j)}</span>);
+            i = j;
+            continue;
+          }
+        }
+        
+        // Check for comments
+        if (str.slice(i, i + 2) === '//') {
+          result.push(<span key={key++} className="text-gray-500">{str.slice(i)}</span>);
+          break;
+        }
+        
+        // Regular character
+        result.push(<span key={key++} className="text-gray-300">{str[i]}</span>);
+        i++;
+      }
+      
+      return result;
+    };
+
+    return <span>{processText(text)}</span>;
+  };
+
+  return (
+    <div ref={windowRef} className="relative min-h-[300px] flex items-center justify-center">
+      {/* Initial dock icon before animation */}
+      {!isVisible && (
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+          <div className={`w-16 h-16 bg-gray-800 rounded-xl shadow-lg border border-gray-600 flex items-center justify-center ${
+            prefersReducedMotion ? '' : 'animate-pulse'
+          }`}>
+            <div className="w-3 h-3 bg-emerald-400 rounded-full"></div>
+          </div>
+          <div className="text-center mt-2 text-xs text-gray-500 dark:text-gray-400">
+            Terminal
+          </div>
+        </div>
+      )}
+
+      {/* Mac Window */}
+      <div 
+        className={`
+          bg-gray-900 dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-700 overflow-hidden
+          font-mono text-sm transform-gpu transition-all duration-500 ease-in-out
+          ${!isVisible 
+            ? 'scale-0 opacity-0 translate-y-32' 
+            : windowState === 'minimized' 
+              ? 'scale-50 opacity-50 translate-y-32' 
+              : windowState === 'maximized' 
+                ? 'scale-100 opacity-100 translate-y-0 w-[1120px] max-w-6xl relative shadow-3xl' 
+                : 'scale-100 opacity-100 translate-y-0 w-[540px] max-w-xl relative'
+          }
+          ${!prefersReducedMotion && isVisible ? 'animate-in slide-in-from-bottom-8 fade-in duration-700' : ''}
+        `}
+      >
+        {/* Window Title Bar */}
+        <div className="bg-gray-800 dark:bg-gray-700 px-4 py-3 flex items-center justify-between border-b border-gray-600">
+          <div className="flex items-center gap-2">
+            {/* Traffic Light Controls */}
+            <button
+              onClick={handleClose}
+              className={`w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors duration-200 flex items-center justify-center group aspect-square ${
+                prefersReducedMotion ? '' : 'hover:scale-110'
+              }`}
+              title="Close"
+            >
+              <X className="w-2 h-2 text-red-800 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </button>
+            <button
+              onClick={handleMinimize}
+              className={`w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-400 transition-colors duration-200 flex items-center justify-center group aspect-square ${
+                prefersReducedMotion ? '' : 'hover:scale-110'
+              }`}
+              title="Minimize"
+            >
+              <Minus className="w-2 h-2 text-yellow-800 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </button>
+            <button
+              onClick={handleMaximize}
+              className={`w-3 h-3 rounded-full bg-green-500 hover:bg-green-400 transition-colors duration-200 flex items-center justify-center group aspect-square ${
+                prefersReducedMotion ? '' : 'hover:scale-110'
+              }`}
+              title={windowState === 'maximized' ? 'Restore Window' : 'Maximize Window'}
+            >
+              <div className={`transition-transform duration-200 ${windowState === 'maximized' ? 'rotate-45' : ''}`}>
+                <Plus className="w-2 h-2 text-green-800 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </button>
+          </div>
+          <div className="text-gray-400 text-xs font-medium">
+            {windowState === 'maximized' ? 'fetchConsultants.js — Maximized' : 'fetchConsultants.js'}
+          </div>
+          <div className="w-12"></div> {/* Spacer for balance */}
+        </div>
+
+        {/* Window Content */}
+        <div className="p-4 bg-gray-900 dark:bg-gray-800 font-mono text-sm min-h-[300px]">
+          <div className="space-y-1">
+            {renderTypedContent()}
+            
+            {/* Show console output after typing is complete */}
+            {typingComplete && (
+              <div className="mt-4">
+                {/* Console.log output simulation */}
+                <div className={`transition-all duration-500 ease-in-out transform ${showConsoleOutput ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                  <div className="text-gray-300 text-sm mb-2">
+                    <pre className="whitespace-pre-wrap text-gray-400">{JSON.stringify(jsonResponse, null, 2)}</pre>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <div className="mt-3 text-gray-500 text-xs">
+              {showConsoleOutput 
+                ? '// Console output displayed ✓'
+                : typingComplete 
+                ? '// Function executed, loading output...'
+                : '// Typing in progress...'
+              }
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom resize handle (visual only) */}
+        <div className="h-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent opacity-30"></div>
+      </div>
+
+      {/* Dock icon when minimized (visual effect) */}
+      {windowState === 'minimized' && isVisible && (
+        <div className="absolute -bottom-20 left-1/2 transform -translate-x-1/2">
+          <div className={`w-12 h-12 bg-gray-800 rounded-lg shadow-lg border border-gray-600 flex items-center justify-center ${
+            prefersReducedMotion ? '' : 'animate-bounce'
+          }`}>
+            <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+          </div>
+          <div className="text-center mt-1 text-xs text-gray-500 dark:text-gray-400">
+            Terminal
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const ClientShowcase = () => {
   const prefersReducedMotion = useMotionPreference();
@@ -174,7 +550,12 @@ const ClientShowcase = () => {
                         src={client.logo}
                         alt=""
                         aria-hidden="true"
-                        className="w-12 h-12 object-contain"
+                        className={`object-contain ${
+                          // Make specific logos larger if they appear too small
+                          ['KTH', 'Sveriges Riksbank', 'PostNord', 'Axfood', 'Dorian Collective', 'Skandia', 'Mars', 'Adlibris', 'Uppsala Universitet'].includes(client.name) 
+                            ? 'w-14 h-14' 
+                            : 'w-12 h-12'
+                        }`}
                         loading="lazy"
                       />
                     </div>
@@ -206,7 +587,12 @@ const ClientShowcase = () => {
                         src={client.logo}
                         alt=""
                         aria-hidden="true"
-                        className="w-12 h-12 object-contain"
+                        className={`object-contain ${
+                          // Make specific logos larger if they appear too small
+                          ['KTH', 'Sveriges Riksbank', 'PostNord', 'Axfood', 'Dorian Collective', 'Skandia', 'Mars', 'Adlibris', 'Uppsala Universitet'].includes(client.name) 
+                            ? 'w-14 h-14' 
+                            : 'w-12 h-12'
+                        }`}
                         loading="lazy"
                       />
                     </div>
@@ -225,33 +611,8 @@ const ClientShowcase = () => {
           )}
           <div className="flex items-center justify-center gap-4">
             <div className="relative">
-              {/* Animated code block */}
-              <div className="bg-gray-800 dark:bg-code-block rounded-lg p-4 font-mono text-sm border border-gray-300 dark:border-gray-600 shadow-lg max-w-md">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-green-400">
-                    <span className="text-blue-300">const</span> partnership = <span className="text-orange-300">{`{`}</span>
-                  </div>
-                  <div className="text-gray-300 pl-4">
-                    success: <span className="text-yellow-300">true</span>,
-                  </div>
-                  <div className="text-gray-300 pl-4">
-                    innovation: <span className="text-purple-300">'unlimited'</span>,
-                  </div>
-                  <div className="text-gray-300 pl-4">
-                    nextProject: <span className="text-emerald-300">'yours'</span>
-                  </div>
-                  <div className="text-green-400">
-                    <span className="text-orange-300">{`}`}</span>;
-                  </div>
-                </div>
-                {/* Animated cursor */}
-                <span className="inline-block w-2 h-4 bg-white dark:bg-custom-dark-lightest ml-1 animate-pulse"></span>
-              </div>
+              {/* Enhanced Mac Window */}
+              <MacWindow />
             </div>
           </div>
         </div>
