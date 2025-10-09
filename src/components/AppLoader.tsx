@@ -32,9 +32,38 @@ const AppLoader = ({ onComplete }: LoaderProps) => {
 
   useEffect(() => {
     if (currentStep < loadingSteps.length) {
+      const baseDelay = loadingSteps[currentStep]?.delay || 300;
+      
+      // Progressive speed increases based on step
+      let speedMultiplier = 1; // Normal speed
+      
+      switch (currentStep) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+          speedMultiplier = 1; // Normal speed
+          break;
+        case 4:
+          speedMultiplier = 0.6; // 40% faster
+          break;
+        case 5:
+          speedMultiplier = 0.5; // 50% faster
+          break;
+        case 6:
+        case 7:
+        case 8:
+          speedMultiplier = 0.4; // 60% faster
+          break;
+        default:
+          speedMultiplier = 0.4; // 60% faster for any additional steps
+      }
+      
+      const adjustedDelay = Math.round(baseDelay * speedMultiplier);
+      
       const timer = setTimeout(() => {
         setCurrentStep(prev => prev + 1);
-      }, loadingSteps[currentStep]?.delay || 300);
+      }, adjustedDelay);
 
       return () => clearTimeout(timer);
     } else {

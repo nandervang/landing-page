@@ -151,7 +151,7 @@ export function HeroGeometric({
             &
           </span>
           <br />
-          <span className="bg-gradient-to-r from-gray-900 via-gray-700 to-gray-500 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-gray-900 via-gray-700 to-gray-500 bg-clip-text text-transparent dark:[text-shadow:_0_0_1px_rgba(255,255,255,0.3),_1px_1px_1px_rgba(255,255,255,0.2)] dark:[-webkit-text-stroke:_0.5px_rgba(255,255,255,0.4)]">
             {title2}
           </span>
         </h1>
