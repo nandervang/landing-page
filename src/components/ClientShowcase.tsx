@@ -540,7 +540,12 @@ const ClientShowcase = () => {
                     className="flex-shrink-0"
                   >
                     <div 
-                      className={`w-24 h-24 rounded-lg border-2 border-gray-200 dark:border-custom-dark bg-white dark:bg-custom-dark-lighter shadow-md flex items-center justify-center p-4 grayscale hover:grayscale-0 hover:border-emerald-300 dark:hover:border-emerald-500 ${
+                      className={`w-24 h-24 rounded-lg border-2 border-gray-200 dark:border-custom-dark bg-white dark:bg-custom-dark-lighter shadow-md flex items-center justify-center grayscale hover:grayscale-0 hover:border-emerald-300 dark:hover:border-emerald-500 ${
+                        // Make specific logos have less padding if they appear too small
+                        ['KTH', 'Sveriges Riksbank', 'PostNord', 'Axfood', 'Valtech', 'Dorian Collective', 'Skandia', 'Mars', 'Adlibris', 'Uppsala Universitet'].includes(client.name) 
+                          ? 'p-2' 
+                          : 'p-4'
+                      } ${
                         prefersReducedMotion ? '' : 'transition-all duration-300'
                       }`}
                       role="img"
@@ -551,10 +556,13 @@ const ClientShowcase = () => {
                         alt=""
                         aria-hidden="true"
                         className={`object-contain ${
-                          // Make specific logos larger if they appear too small
-                          ['KTH', 'Sveriges Riksbank', 'PostNord', 'Axfood', 'Dorian Collective', 'Skandia', 'Mars', 'Adlibris', 'Uppsala Universitet'].includes(client.name) 
-                            ? 'w-14 h-14' 
-                            : 'w-12 h-12'
+                          // Make Valtech logo largest
+                          client.name === 'Valtech' || client.name === 'Uppsala Universitet'|| client.name === 'AstraZeneca'
+                            ? 'w-17 h-17'
+                            : // Make specific logos larger if they appear too small
+                              ['KTH', 'Sveriges Riksbank', 'PostNord', 'Axfood', 'Dorian Collective', 'AstraZeneca', 'Skandia', 'Mars', 'Adlibris', 'Uppsala Universitet'].includes(client.name) 
+                              ? 'w-14 h-14' 
+                              : 'w-12 h-12'
                         }`}
                         loading="lazy"
                       />
@@ -577,7 +585,12 @@ const ClientShowcase = () => {
                 {clients.map((client, index) => (
                   <MarqueeItem key={index} className="mx-6">
                     <div 
-                      className={`w-24 h-24 rounded-lg border-2 border-gray-200 dark:border-custom-dark bg-white dark:bg-custom-dark-lighter shadow-md flex items-center justify-center p-4 grayscale hover:grayscale-0 hover:border-emerald-300 dark:hover:border-emerald-500 ${
+                      className={`w-24 h-24 rounded-lg border-2 border-gray-200 dark:border-custom-dark bg-white dark:bg-custom-dark-lighter shadow-md flex items-center justify-center grayscale hover:grayscale-0 hover:border-emerald-300 dark:hover:border-emerald-500 ${
+                        // Make specific logos have less padding if they appear too small
+                        ['KTH', 'Sveriges Riksbank', 'PostNord', 'Axfood', 'Valtech', 'Dorian Collective', 'AstraZeneca', 'Skandia', 'Mars', 'Adlibris', 'Uppsala Universitet'].includes(client.name) 
+                          ? 'p-2' 
+                          : 'p-4'
+                      } ${
                         prefersReducedMotion ? '' : 'transition-all duration-300'
                       }`}
                       role="img"
@@ -588,10 +601,13 @@ const ClientShowcase = () => {
                         alt=""
                         aria-hidden="true"
                         className={`object-contain ${
-                          // Make specific logos larger if they appear too small
-                          ['KTH', 'Sveriges Riksbank', 'PostNord', 'Axfood', 'Dorian Collective', 'Skandia', 'Mars', 'Adlibris', 'Uppsala Universitet'].includes(client.name) 
-                            ? 'w-14 h-14' 
-                            : 'w-12 h-12'
+                          // Make Valtech logo largest
+                          client.name === 'Valtech' || client.name === 'Uppsala Universitet'|| client.name === 'AstraZeneca'
+                            ? 'w-17 h-17'
+                            : // Make specific logos larger if they appear too small
+                              ['KTH', 'Sveriges Riksbank', 'PostNord', 'Axfood', 'Dorian Collective', 'Skandia', 'Mars', 'Adlibris', 'Uppsala Universitet'].includes(client.name) 
+                              ? 'w-14 h-14' 
+                              : 'w-12 h-12'
                         }`}
                         loading="lazy"
                       />
