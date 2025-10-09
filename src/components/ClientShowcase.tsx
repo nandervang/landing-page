@@ -385,8 +385,8 @@ const MacWindow = () => {
             : windowState === 'minimized' 
               ? 'scale-50 opacity-50 translate-y-32' 
               : windowState === 'maximized' 
-                ? 'scale-100 opacity-100 translate-y-0 w-[1120px] max-w-6xl relative shadow-3xl' 
-                : 'scale-100 opacity-100 translate-y-0 w-[540px] max-w-xl relative'
+                ? 'scale-100 opacity-100 translate-y-0 w-full max-w-full relative shadow-3xl' 
+                : 'scale-100 opacity-100 translate-y-0 w-[85%] sm:w-[540px] max-w-xl relative'
           }
           ${!prefersReducedMotion && isVisible ? 'animate-in slide-in-from-bottom-8 fade-in duration-700' : ''}
         `}
