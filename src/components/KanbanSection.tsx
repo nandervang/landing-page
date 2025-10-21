@@ -305,7 +305,7 @@ const KanbanSection = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-foreground mb-4 font-mono tracking-tight">
-            COMPANY _MANAGEMENT_BOARD
+            COMPANY <span className="relative -left-[21px]">_MANAGEMENT_BOARD</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-mono">
             {'>'} Real-time snapshot of our company's active initiatives

@@ -11,6 +11,7 @@ import { setupScrollAnimations } from './utils/animations';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(false);
 
   useEffect(() => {
     const cleanup = setupScrollAnimations();
@@ -19,16 +20,32 @@ function App() {
     // Set dark mode by default during loading
     document.documentElement.classList.add('dark');
     
+    // Check if this is the first visit
+    const hasVisited = localStorage.getItem('andervang-visited');
+    
+    if (!hasVisited) {
+      // First visit - show loader and keep loading state
+      setShowLoader(true);
+      setIsLoading(true);
+      // Don't mark as visited yet - wait until loader completes
+    } else {
+      // Not first visit - skip loader entirely
+      setShowLoader(false);
+      setIsLoading(false);
+    }
+    
     return cleanup;
   }, []);
 
   const handleLoadingComplete = () => {
+    // Mark as visited only when the loader actually completes
+    localStorage.setItem('andervang-visited', 'true');
     setIsLoading(false);
   };
 
   return (
     <AnimatePresence mode="wait">
-      {isLoading ? (
+      {isLoading && showLoader ? (
         <AppLoader key="loader" onComplete={handleLoadingComplete} />
       ) : (
         <motion.div

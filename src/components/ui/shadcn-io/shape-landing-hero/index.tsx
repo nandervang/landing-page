@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Circle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMotionPreference } from "@/hooks/useMotionPreference";
+import { AndervangLogo } from "@/components/AndervangLogo";
 
 type ElegantShapeProps = {
   className?: string;
@@ -135,6 +136,11 @@ export function HeroGeometric({
   const StaticContent = () => (
     <div className="relative z-10 container mx-auto px-4 md:px-6">
       <div className="max-w-3xl mx-auto text-center">
+        {/* Andervang Logo */}
+        <div className="mb-8 md:mb-12">
+          <AndervangLogo width={190} height={190} />
+        </div>
+
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary border border-border mb-8 md:mb-12">
           <Circle className="h-2 w-2 fill-green-500" />
           <span className="text-sm text-muted-foreground tracking-wide uppercase">
@@ -151,7 +157,7 @@ export function HeroGeometric({
             &
           </span>
           <br />
-          <span className="bg-gradient-to-r from-gray-900 via-gray-700 to-gray-500 bg-clip-text text-transparent dark:[text-shadow:_0_0_1px_rgba(255,255,255,0.3),_1px_1px_1px_rgba(255,255,255,0.2)] dark:[-webkit-text-stroke:_0.5px_rgba(255,255,255,0.4)]">
+                <span className="bg-gradient-to-r from-gray-900 via-gray-400 to-gray-900 bg-clip-text text-transparent dark:[text-shadow:_0_0_1px_rgba(255,255,255,0.3),_1px_1px_1px_rgba(255,255,255,0.2)] dark:[-webkit-text-stroke:_0.5px_rgba(255,255,255,0.4)] bg-[length:400%_100%] animate-[gradient-shift_40s_linear_infinite]">
             {title2}
           </span>
         </h1>
@@ -219,8 +225,19 @@ export function HeroGeometric({
       ) : (
         <div className="relative z-10 container mx-auto px-4 md:px-6">
           <div className="max-w-3xl mx-auto text-center">
+            {/* Andervang Logo with Animation */}
             <motion.div
               custom={0}
+              variants={fadeUpVariants}
+              initial="hidden"
+              animate="visible"
+              className="mb-8 md:mb-12"
+            >
+              <AndervangLogo width={190} height={190} />
+            </motion.div>
+
+            <motion.div
+              custom={1}
               variants={fadeUpVariants}
               initial="hidden"
               animate="visible"
@@ -258,7 +275,7 @@ export function HeroGeometric({
                   &
                 </motion.span>
                 <br />
-                <span className="bg-gradient-to-r from-gray-900 via-gray-700 to-gray-500 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-gray-900 via-gray-400 to-gray-900 bg-clip-text text-transparent bg-[length:400%_100%] animate-[gradient-shift_40s_linear_infinite]">
                   {title2}
                 </span>
               </h1>
